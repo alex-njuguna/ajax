@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.http import HttpResponse
 
 from .models import Profile
 
@@ -17,3 +18,15 @@ def get_profiles(request):
     }
 
     return JsonResponse(context)
+
+def create_profile(request):
+    if request.method == "POST" and request.POST.get("action") == "post":
+        data = request.POST
+        print(data)
+        name = data["name"]
+        email = data["email"]
+        bio = data["bio"]
+        new_profile = Profile(name=name, email=email, bio=bio)
+        new_profile.save()
+
+        return HttpResponse()

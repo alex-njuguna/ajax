@@ -6,6 +6,29 @@
 
     <ul id="display-data" class="list-group list-group-flush"></ul>
 
+    <div class="container mt-4">
+        <h1 class="mb-4 text-center">Create a New Profile</h1>
+        
+        <form id="post-form" method="post" class="p-4 border rounded shadow-sm bg-light">
+            <div class="mb-3">
+                <input type="text" name="name" id="name" class="form-control" placeholder="Name" required>
+            </div>
+            
+            <div class="mb-3">
+                <input type="email" name="email" id="email" class="form-control" placeholder="Email">
+            </div>
+            
+            <div class="mb-3">
+                <input name="bio" id="bio" class="form-control" placeholder="Bio" rows="4">
+            </div>
+            
+            <button type="submit" class="btn btn-primary w-100">
+                Save
+            </button>
+        </form>
+    </div>
+    
+
     <script>
     // fetch data from the backend
         $(document).ready(function(){
@@ -28,6 +51,32 @@
                     }
                 })
             }, 1000)
+        })
+
+    //   save a new profile via from  
+        $(document).on("submit", "#post-form", function(e) {
+            e.preventDefault()
+
+            var form_data = {
+                    name: $("#name").val(),
+                    email: $("#email").val(),
+                    bio:$("#bio").val(),
+                    csrfmiddlewaretoken: "{{ csrf_token }}",
+                    action: "post"
+                }
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'create_profile' %}",
+                data: form_data,
+                success: function(response){
+                    // alert("Profile saved successfully!")
+                    $("#post-form")[0].reset()
+                },
+                error: function(error){
+                    alert("An error occured!!")
+                },
+            })
         })
     </script>
     
