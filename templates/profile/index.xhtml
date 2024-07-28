@@ -1,0 +1,35 @@
+{% extends 'base.xhtml' %}
+
+
+{% block content %}
+    <h1 class="fst-italic">List of live data</h1>
+
+    <ul id="display-data" class="list-group list-group-flush"></ul>
+
+    <script>
+    // fetch data from the backend
+        $(document).ready(function(){
+
+            setInterval(function() {
+                $.ajax({
+                    type: "GET",
+                    url: "{% url 'get_profiles' %}",
+                    success: function(response) {
+                        // console.log(response)
+                        $("#display-data").empty()
+                        var temp = ""
+                        for (var key in response.profiles){
+                            temp += `<li class="list-group-item">${response.profiles[key].name}</li>`
+                        }
+                        $("#display-data").append(temp)
+                    },
+                    error: function(error) {
+                        alert("An error loading data")
+                    }
+                })
+            }, 1000)
+        })
+    </script>
+    
+{% endblock content %}
+    
